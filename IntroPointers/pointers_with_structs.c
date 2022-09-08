@@ -7,7 +7,11 @@ struct _complex {
 
 typedef struct _complex Complex;
 
-void add_complex(Complex* x, Complex* y, Complex* z);
+// Complex add_complex_values(Complex* x, Complex* y);
+void add_complex(const Complex* x, const Complex* y, Complex* z) {
+	z->real = x->real + y->real;
+	z->imag = x->imag + y->imag;
+}
 
 void print_complex(const Complex* x) {
 	//printf("%lf ", (*x).real);
@@ -28,6 +32,10 @@ int main() {
 
 	print_complex(&a);
 	print_complex(z);
+
+	Complex t;
+	add_complex(&a, &b, &t);
+	print_complex(&t);
 
 	return 0;
 }
