@@ -14,5 +14,8 @@ int main() {
 
 	std::cout << "z: " << z.length() << ' ' << z.width() << '\n';
 
+	x = y;
+	std::cout << x << '\n' << y << '\n';
+
 	return 0;
 }

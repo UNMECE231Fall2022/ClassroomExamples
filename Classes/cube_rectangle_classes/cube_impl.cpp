@@ -57,6 +57,29 @@ void Cube::calc_surface_area() {
 		+ (2 * _width * _depth);
 }
 
+Cube& Cube::operator=(const Cube& c) {
+	if (this == &c) {
+		return *this;
+	}
+
+	_length = c._length;
+	_width = c._width;
+	_depth = c._depth;
+	_volume = c._volume;
+	_surface_area = c._surface_area;
+
+	return *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const Cube& c) {
+	out << c.length() << ' ' << c.width() << ' ' << c.depth();
+	out << ' ' << c.volume() << ' ' << c.surface_area();
+	return out;
+}
+
+
+
+
 
 
 

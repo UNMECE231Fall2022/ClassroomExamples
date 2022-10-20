@@ -24,6 +24,10 @@ class Cube : public Rectangle {
 		void set_length(int new_length) override;
 		void set_width(int new_width) override;
 		void set_depth(int depth);
+
+		Cube& operator=(const Cube& c);
+
+		friend std::ostream& operator<<(std::ostream& out, const Cube& c);
 };
 
 #endif // DERIVED_CUBE_HPP
