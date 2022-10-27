@@ -1,4 +1,5 @@
-#include <cstddef>
+#include <cassert> //assert
+#include <cstddef> //std::size_t
 
 template <typename T>
 class SingleList {
@@ -17,7 +18,7 @@ class SingleList {
 
 		void reccopy(Node* ptr) {
 			if (ptr) {
-				push_front(ptr->data);
+				push_back(ptr->data);
 				reccopy(ptr->next);
 			}
 		}
@@ -47,6 +48,97 @@ class SingleList {
 		std::size_t size() const {
 			return _size;
 		}
+
+		// pop_back
+
+		void push_front(T value) {
+			SingleList* item = new Node;
+			item->data = value;
+			item->next = nullptr;
+
+			if (empty()) {
+				_last = item;
+			}
+			else {
+				item->next = _first;
+			}
+
+			_first = item;
+			_size++;
+		}
+
+		void push_back(T value) {
+			SingleList* item = new Node;
+			item->data = value;
+			item->next = nullptr;
+			
+			if (empty()) {
+				_first = item;
+			}
+			// not empty
+			else {
+				_last->next = item;
+			}
+			_last = item;
+			_size++;
+		}
+		
+		void pop_front() {
+			assert(!empty());
+			/*
+			 * if (empty()) {
+			 * 	return;
+			 * }
+			 */
+			SingleList* node_to_delete = _first;
+			if (_size == 1) {
+				_first = nullptr;
+				_last = nullptr;
+			}
+			else {
+				_first = _first->next;
+			}
+			delete node_to_delete;
+			_size--;
+		}
+
+		void pop_back() {
+			assert(!empty());
+			SingleList* node_to_delete = _last;
+
+			// Get second-to-last item
+			SingleList* new_last = _first;
+			while(new_last->next != _last) {
+				new_last = new_last->next;
+			}
+			_last = new_last;
+			_last->next = nullptr;
+			delete node_to_delete;
+			_size--;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		bool empty() const {
 			return (_first == nullptr) && (_last == nullptr)\
