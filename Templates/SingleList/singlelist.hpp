@@ -1,5 +1,6 @@
-#include <cassert> //assert
-#include <cstddef> //std::size_t
+#include <cassert> // assert
+#include <cstddef> // std::size_t
+#include <iostream> // std::ostream, std::cout
 
 template <typename T>
 class SingleList {
@@ -49,10 +50,8 @@ class SingleList {
 			return _size;
 		}
 
-		// pop_back
-
 		void push_front(T value) {
-			SingleList* item = new Node;
+			Node* item = new Node;
 			item->data = value;
 			item->next = nullptr;
 
@@ -68,7 +67,7 @@ class SingleList {
 		}
 
 		void push_back(T value) {
-			SingleList* item = new Node;
+			Node* item = new Node;
 			item->data = value;
 			item->next = nullptr;
 			
@@ -85,12 +84,7 @@ class SingleList {
 		
 		void pop_front() {
 			assert(!empty());
-			/*
-			 * if (empty()) {
-			 * 	return;
-			 * }
-			 */
-			SingleList* node_to_delete = _first;
+			Node* node_to_delete = _first;
 			if (_size == 1) {
 				_first = nullptr;
 				_last = nullptr;
@@ -104,44 +98,60 @@ class SingleList {
 
 		void pop_back() {
 			assert(!empty());
-			SingleList* node_to_delete = _last;
+			Node* node_to_delete = _last;
 
-			// Get second-to-last item
-			SingleList* new_last = _first;
-			while(new_last->next != _last) {
-				new_last = new_last->next;
+			if (_size == 1) {
+				_first = nullptr;
+				_last = nullptr;
 			}
-			_last = new_last;
-			_last->next = nullptr;
+			else {
+				// Get second-to-last item
+				Node* new_last = _first;
+				while(new_last->next != _last) {
+					new_last = new_last->next;
+				}
+				_last = new_last;
+				_last->next = nullptr;
+			}
 			delete node_to_delete;
 			_size--;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		bool empty() const {
 			return (_first == nullptr) && (_last == nullptr)\
 							&& (_size == 0);
 		}
+
+		void print() const {
+			Node* elem;
+			for (elem=_first; elem!=nullptr; elem=elem->next) {
+				std::cout << elem->data << ' ';
+			}
+			std::cout << '\n';
+		}
+			
+		SingleList& operator=(const SingleList& sl) {
+			if (this == &sl) {
+				return *this;
+			}
+
+			while (!empty()) {
+				pop_front();
+			}
+			reccopy(sl._first);
+
+			return *this;
+		}
+
+		template <typename U>
+		friend std::ostream& operator<<(std::ostream& out, 
+				const SingleList<U>& sl);
 };
+
+template <typename U>
+std::ostream& operator<<(std::ostream& out, const SingleList<U>& sl) {
+	for (auto elem=sl._first; elem!=nullptr; elem=elem->next) {
+		out << elem->data << ' ';
+	}
+	return out;
+}
