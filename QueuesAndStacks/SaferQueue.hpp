@@ -9,31 +9,22 @@ concept Number = std::integral<T> || std::floating_point<T>;
 template <Number T>
 class Queue {
 	private:
-		T* _data;
+		std::unique_ptr<T[]> _data;
 		std::size_t _size;
 
 	public:
-		Queue(): _data{nullptr}, _size{0} {}
+		Queue(): _size{0} {}
 
-		Queue(T value): _data{nullptr}, _size{0} {
-			// _data = new T;
-			// *_data = value;
-			_data = new T(value);
-			assert(_data != nullptr);
-			_size = 1;
+		Queue(T value): _size{1} {
+			_data = std::make_unique<T[]>(1);
+			_data[0] = value;
 		}
 
-		Queue(const Queue& other): _data{nullptr}, _size{0} {
-			_data = new T[other._size];
-			assert(_data != nullptr);
+		Queue(const Queue& other): _size{other._size} {
+			_data = std::make_unique<T[]>(other._size);
 			for (int i=0; i<other._size; ++i) {
 				_data[i] = other._data[i];
 			}
-			_size = other._size;
-		}
-
-		~Queue() {
-			delete[] _data;
 		}
 
 		std::size_t size() const {
@@ -55,9 +46,7 @@ class Queue {
 				data_copy[i] = _data[i];
 			}
 
-			delete[] _data;
-			_data = new T[_size+1];
-			assert(_data != nullptr);
+			_data = std::make_unique<T[]>(_size+1);
 
 			for (i=0; i<_size; ++i) {
 				_data[i] = data_copy[i];
@@ -74,9 +63,7 @@ class Queue {
 				data_copy[i] = _data[i];
 			}
 
-			delete[] _data;
-			_data = new T[_size-1];
-			assert(_data != nullptr);
+			_data = std::make_unique<T[]>(_size-1);
 
 			for (i=1; i<_size; ++i) {
 				_data[i-1] = data_copy[i];
@@ -101,9 +88,7 @@ class Queue {
 				return *this;
 			}
 
-			delete[] _data;
-			_data = new T[other._size];
-			assert(_data != nullptr);
+			_data= std::make_unique<T[]>(other._size);
 
 			for (int i=0; i<other._size; ++i) {
 				_data[i] = other._data[i];
