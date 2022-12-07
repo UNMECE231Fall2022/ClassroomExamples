@@ -15,7 +15,7 @@ void histo_from_dir(const std::filesystem::directory_iterator& dir,
 					std::regex_search(file_content, expr_match, expr);
 					if (expr_match.size() > 0) {
 						int index = std::stoi(expr_match[0]);
-						std::cout << index << ' ';
+						//std::cout << index << ' ';
 						histo[index]++;
 					}
 				}

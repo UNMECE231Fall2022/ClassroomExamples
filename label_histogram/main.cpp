@@ -1,6 +1,7 @@
 #include <array>
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <ranges>
 #include <regex>
@@ -32,8 +33,19 @@ int main()  {
 	histo_from_dir(label_dir, expr, histo);
 	std::cout << '\n';
 
-	std::ranges::for_each(histo, [](int& x) { std::cout << x << ' '; });
-	std::cout << '\n';
+//	std::ranges::for_each(histo, [](int& x) { std::cout << x << ' '; });
+//	std::cout << '\n';
+	std::ofstream outfile;
+	outfile.open("shorthisto.txt");
+	if (outfile.is_open()) {
+		std::ranges::for_each(
+			histo, 
+			[&outfile](const int& x) { 
+				outfile << x << ' ';
+			}
+		);
+		outfile.close();
+	}
 
 	return 0;
 }
